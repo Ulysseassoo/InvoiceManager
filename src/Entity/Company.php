@@ -5,9 +5,11 @@ namespace App\Entity;
 use App\Repository\CompanyRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Core\Annotation\ApiResource;
 
 
 /**
+ * @ApiResource()
  * @ORM\Entity(repositoryClass=CompanyRepository::class)
  */
 class Company
