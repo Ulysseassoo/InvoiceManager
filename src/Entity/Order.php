@@ -70,6 +70,13 @@ class Order
      */
     private $products;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=State::class, inversedBy="commands")
+     * @ORM\JoinColumn(nullable=false)
+     * @Groups({"order:read", "order:write"})
+     */
+    private $state;
+
     public function __construct()
     {
         $this->payment = new ArrayCollection();
@@ -197,6 +204,18 @@ class Order
                 $product->setCommand(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getState(): ?State
+    {
+        return $this->state;
+    }
+
+    public function setState(?State $state): self
+    {
+        $this->state = $state;
 
         return $this;
     }
