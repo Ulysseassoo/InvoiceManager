@@ -34,7 +34,7 @@ class State
     private $name;
 
     /**
-     * @ORM\OneToMany(targetEntity=Order::class, mappedBy="state")
+     * @ORM\OneToMany(targetEntity=Order::class, mappedBy="state", cascade={"persist"})
      * @Groups({"state:read", "state:write"})
      */
     private $commands;

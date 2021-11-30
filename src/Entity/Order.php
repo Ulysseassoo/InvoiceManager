@@ -71,7 +71,7 @@ class Order
     private $products;
 
     /**
-     * @ORM\ManyToOne(targetEntity=State::class, inversedBy="commands")
+     * @ORM\ManyToOne(targetEntity=State::class, inversedBy="commands", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      * @Groups({"order:read", "order:write"})
      */

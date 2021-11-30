@@ -55,5 +55,5 @@ security:
     - { path: ^/api/docs, roles: IS_AUTHENTICATED_ANONYMOUSLY } # Allows accessing the Swagger UI
     - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
     - { path: ^/api/users, roles: IS_AUTHENTICATED_FULLY }
-    - { path: ^/api/orders, roles: IS_AUTHENTICATED_FULLY }
+    # - { path: ^/api/orders, roles: IS_AUTHENTICATED_FULLY }
     - { path: ^/api/companies, roles: IS_AUTHENTICATED_FULLY }
