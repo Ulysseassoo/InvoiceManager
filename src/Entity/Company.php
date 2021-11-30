@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Repository\CompanyRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+
 
 /**
  * @ORM\Entity(repositoryClass=CompanyRepository::class)
@@ -14,21 +16,25 @@ class Company
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups("company")
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups("company")
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups("company")
      */
     private $address;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups("company")
      */
     private $logo;
 

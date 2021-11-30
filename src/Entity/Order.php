@@ -6,6 +6,8 @@ use App\Repository\OrderRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+
 
 /**
  * @ORM\Entity(repositoryClass=OrderRepository::class)
@@ -17,47 +19,55 @@ class Order
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups("order")
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups("order")
      */
     private $firstname;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups("order")
      */
     private $lastname;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups("order")
      */
     private $phone_number;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups("order")
      */
     private $address;
 
     /**
      * @ORM\Column(type="datetime_immutable")
+     * @Groups("order")
      */
     private $lastDate;
 
     /**
-     * @ORM\OneToMany(targetEntity=Payment::class, mappedBy="command")
+     * @ORM\OneToMany(targetEntity=Payment::class, mappedBy="command", cascade={"persist"})
+     * @Groups("order")
      */
-    private $payments;
+    private $payment;
 
     /**
-     * @ORM\OneToMany(targetEntity=Product::class, mappedBy="command")
+     * @ORM\OneToMany(targetEntity=Product::class, mappedBy="command", cascade={"persist"})
+     * @Groups("order")
      */
     private $products;
 
     public function __construct()
     {
-        $this->payments = new ArrayCollection();
+        $this->payment = new ArrayCollection();
         $this->products = new ArrayCollection();
     }
 
@@ -131,25 +141,25 @@ class Order
      */
     public function getPayment(): Collection
     {
-        return $this->payments;
+        return $this->payment;
     }
 
-    public function addPayment(Payment $payments): self
+    public function addPayment(Payment $payment): self
     {
-        if (!$this->payments->contains($payments)) {
-            $this->payments[] = $payments;
-            $payments->setCommand($this);
+        if (!$this->payment->contains($payment)) {
+            $this->payment[] = $payment;
+            $payment->setCommand($this);
         }
 
         return $this;
     }
 
-    public function removePayment(Payment $payments): self
+    public function removePayment(Payment $payment): self
     {
-        if ($this->payments->removeElement($payments)) {
+        if ($this->payment->removeElement($payment)) {
             // set the owning side to null (unless already changed)
-            if ($payments->getCommand() === $this) {
-                $payments->setCommand(null);
+            if ($payment->getCommand() === $this) {
+                $payment->setCommand(null);
             }
         }
 
