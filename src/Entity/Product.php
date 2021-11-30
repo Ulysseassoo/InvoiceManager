@@ -8,7 +8,10 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource
+ * @ApiResource(
+ *     normalizationContext={"groups"={"product:read"}},
+ *     denormalizationContext={"groups"={"product:write"}}
+ * )
  * @ORM\Entity(repositoryClass=ProductRepository::class)
  */
 class Product
@@ -17,19 +20,19 @@ class Product
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups("order")
+     * @Groups({"product:read", "order:read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups("order")
+     * @Groups({"product:read", "product:write", "order:read", "order:write"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups("order")
+     * @Groups({"product:read", "product:write", "order:read", "order:write"})
      */
     private $amount;
 

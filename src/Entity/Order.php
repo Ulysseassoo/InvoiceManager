@@ -12,7 +12,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource(
- * itemOperations={"get"}
+ *     normalizationContext={"groups"={"order:read"}},
+ *     denormalizationContext={"groups"={"order:write"}}
  * )
  * @ORM\Entity(repositoryClass=OrderRepository::class)
  * @ORM\Table(name="`order`")
@@ -23,49 +24,49 @@ class Order
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups("order")
+     * @Groups("order:read")
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups("order")
+     * @Groups({"order:read", "order:write"})
      */
     private $firstname;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups("order")
+     * @Groups({"order:read", "order:write"})
      */
     private $lastname;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups("order")
+     * @Groups({"order:read", "order:write"})
      */
-    private $phone_number;
+    private $phoneNumber;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups("order")
+     * @Groups({"order:read", "order:write"})
      */
     private $address;
 
     /**
      * @ORM\Column(type="datetime_immutable")
-     * @Groups("order")
+     * @Groups({"order:read", "order:write"})
      */
     private $lastDate;
 
     /**
      * @ORM\OneToMany(targetEntity=Payment::class, mappedBy="command", cascade={"persist"})
-     * @Groups("order")
+     * @Groups({"order:read", "order:write"})
      */
     private $payment;
 
     /**
      * @ORM\OneToMany(targetEntity=Product::class, mappedBy="command", cascade={"persist"})
-     * @Groups("order")
+     * @Groups({"order:read", "order:write"})
      */
     private $products;
 
@@ -106,12 +107,12 @@ class Order
 
     public function getPhoneNumber(): ?string
     {
-        return $this->phone_number;
+        return $this->phoneNumber;
     }
 
-    public function setPhoneNumber(string $phone_number): self
+    public function setPhoneNumber(string $phoneNumber): self
     {
-        $this->phone_number = $phone_number;
+        $this->phoneNumber = $phoneNumber;
 
         return $this;
     }

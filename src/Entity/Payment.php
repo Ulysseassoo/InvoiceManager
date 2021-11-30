@@ -8,7 +8,10 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource
+ * @ApiResource(
+ *     normalizationContext={"groups"={"payment:read"}},
+ *     denormalizationContext={"groups"={"payment:write"}}
+ * )
  * @ORM\Entity(repositoryClass=PaymentRepository::class)
  */
 class Payment
@@ -17,19 +20,19 @@ class Payment
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups("order")
+     * @Groups({"payment:read", "order:read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups("order")
+     * @Groups({"payment:read", "payment:write", "order:write", "order:read"})
      */
     private $type;
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups("order")
+     * @Groups({"payment:read", "payment:write", "order:write", "order:read"})
      */
     private $amount;
 
