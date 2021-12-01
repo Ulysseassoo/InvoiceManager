@@ -28,9 +28,20 @@ class OrderRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('o')
             ->join('o.products', 'p')
             ->join('o.payment', 'y')
-            ->where('o.state_id != 4')
+            ->where('o.state != 4')
             ->groupBy('o.id')
             ->having('SUM(p.amount) = SUM(y.amount)')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function checkDueDate()
+    {
+        return $this->createQueryBuilder('o')
+            ->where('o.state != 3')
+            ->andWhere('o.lastDate < :today')
+            ->setParameter('today', new \DateTime())
             ->getQuery()
             ->getResult()
         ;

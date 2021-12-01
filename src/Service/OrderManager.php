@@ -23,13 +23,13 @@ class OrderManager
         $this->mailer = $mailer;
     }
     
-    public function CheckAmountOrders()
+    public function CheckAmountOrders(): Array
     {
         $orders = $this->orderRepository->checkOrderAmounts();
         // Id = 4, paid state
         $paidState = $this->stateRepository->find(4);
         foreach ($orders as $order) {
-            
+
             $order->setState($paidState);
             $this->em->persist($order);
             $this->em->flush();
@@ -48,4 +48,17 @@ class OrderManager
         
         return $orders;
     }
+    public function CheckOrdersDueDate()
+    {
+        $orders = $this->orderRepository->checkDueDate();
+        // Id = 4, paid state
+        $lateState = $this->stateRepository->find(3);
+        foreach ($orders as $order) {
+            $order->setState($lateState);
+            $this->em->persist($order);
+            $this->em->flush();
+        }
+        return $orders;
+    }
+
 }
