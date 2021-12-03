@@ -6,10 +6,19 @@ use App\Repository\CompanyRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Controller\CompanyController;
+
 
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *  collectionOperations={
+ *     "get",
+ *     "post" = {
+ *       "controller" = CompanyController::class,
+ *       "deserialize" = false,
+ *     }
+ * })
  * @ORM\Entity(repositoryClass=CompanyRepository::class)
  */
 class Company

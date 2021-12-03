@@ -1,11 +1,13 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { Link } from "react-router-dom"
 import { OrderContext } from "../Provider/OrderProvider"
 
 const ListOrders = () => {
 	const context = React.useContext(OrderContext)
 	let { orders, isLoading } = context
-	console.log(orders)
+	useEffect(() => {
+		console.log(orders)
+	}, [orders])
 	return (
 		<div>
 			<h1>List of Orders</h1>
