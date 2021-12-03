@@ -17,7 +17,7 @@ use App\Controller\CompanyController;
  *     "post" = {
  *       "controller" = CompanyController::class,
  *       "deserialize" = false,
- * "openapi_context" = {
+ *       "openapi_context" = {
  *         "requestBody" = {
  *           "description" = "File upload to an existing resource (company)",
  *           "required" = true,
@@ -47,8 +47,44 @@ use App\Controller\CompanyController;
  *           },
  *         },
  *       },
- *     }
- * })
+ *     },
+ *  },
+ * itemOperations={"get", "put" = {
+ *       "method" = "POST",
+ *       "controller" = CompanyController::class,
+ *       "deserialize" = false,
+ *       "openapi_context" = {
+ *         "requestBody" = {
+ *           "description" = "File upload to an existing resource (company)",
+ *           "required" = true,
+ *           "content" = {
+ *             "multipart/form-data" = {
+ *               "schema" = {
+ *                 "type" = "object",
+ *                 "properties" = {
+ *                   "name" = {
+ *                     "description" = "The name of the company",
+ *                     "type" = "string",
+ *                     "example" = "Deliveroo",
+ *                   },
+ *                   "address" = {
+ *                     "description" = "The address of the company",
+ *                     "type" = "string",
+ *                     "example" = "152 Avenue de l'arche, Courbevoie",
+ *                   },
+ *                   "logo" = {
+ *                     "type" = "string",
+ *                     "format" = "binary",
+ *                     "description" = "Upload the logo of the company",
+ *                   },
+ *                 },
+ *               },
+ *             },
+ *           },
+ *         },
+ *       },
+ *     },},
+ * )
  * @ORM\Entity(repositoryClass=CompanyRepository::class)
  */
 class Company
