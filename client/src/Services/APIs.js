@@ -12,27 +12,39 @@ export const login = async (data) => {
 	}
 }
 
-export const getAllArticleCategories = async (token) => {
-	let response = await fetch("http://edu.project.etherial.fr/articles/categories", {
+export const getAllOrders = async (token) => {
+	try {
+		const response = await axios.get(`${baseUrl}/orders`, {
+			headers: {
+				"Content-type": "application/json",
+				Authorization: `Bearer ${token}`
+			}
+		})
+
+		return response.data
+	} catch (error) {
+		console.log(error)
+	}
+}
+
+export const createOrder = async (data, token) => {
+	let response = await axios.post(`${baseUrl}/orders`, data, {
 		headers: {
 			Authorization: `Bearer ${token}`
 		}
 	})
 
-	let json = await response.json()
-
-	return json
+	return response
 }
 
-export const getArticleById = async (token, article_id) => {
-	let response = await fetch("http://edu.project.etherial.fr/articles/:id", {
+export const getOrder = async (order_id, token) => {
+	let response = await axios.get(`${baseUrl}/orders/${order_id}`, {
 		headers: {
 			Authorization: `Bearer ${token}`
-		},
-		body: JSON.stringify({ article_id: article_id })
+		}
 	})
 
-	let json = await response.json()
+	let json = await response.data
 
 	return json
 }

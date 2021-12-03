@@ -12,21 +12,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * @ApiResource(
  *     normalizationContext={"groups"={"user:read"}},
- *     denormalizationContext={"groups"={"user:write"}},
- *     itemOperations={
- *             "get"={
- *                 "requirements"={"id"="\d+"}
- *             },
- *             "get_me"={
- *                 "method"="GET",
- *                 "path"="/users/me",
- *                 "controller"=GetMeAction::class,
- *                 "openapi_context"={
- *                     "parameters"={}
- *                 },
- *                 "read"=false
- *             }
- *     }
+ *     denormalizationContext={"groups"={"user:write"}}
  * )
  * @ORM\Entity(repositoryClass=UserRepository::class)
  */

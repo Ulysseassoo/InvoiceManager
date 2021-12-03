@@ -1,7 +1,31 @@
 import React from "react"
+import { Link } from "react-router-dom"
+import { OrderContext } from "../Provider/OrderProvider"
 
 const ListOrders = () => {
-	return <div>List of Orders</div>
+	const context = React.useContext(OrderContext)
+	let { orders, isLoading } = context
+	console.log(orders)
+	return (
+		<div>
+			<h1>List of Orders</h1>
+			<Link to="/orders/new">Create a new order</Link>
+			{isLoading ? (
+				<div>
+					{orders.map((order) => {
+						return (
+							<div key={order.id}>
+								<div>{order.firstname}</div>
+								<div>{order.lastname}</div>
+							</div>
+						)
+					})}
+				</div>
+			) : (
+				"Loading..."
+			)}
+		</div>
+	)
 }
 
 export default ListOrders

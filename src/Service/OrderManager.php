@@ -51,7 +51,6 @@ class OrderManager
     public function CheckOrdersDueDate()
     {
         $orders = $this->orderRepository->checkDueDate();
-        // Id = 4, paid state
         $lateState = $this->stateRepository->find(3);
         foreach ($orders as $order) {
             $order->setState($lateState);
