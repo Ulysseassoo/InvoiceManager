@@ -59,3 +59,13 @@ export const getOrder = async (order_id, token) => {
 
 	return json
 }
+
+export const getOrderStates = async (token) => {
+	let response = await axios.get(`${baseUrl}/states`, {
+		headers: {
+			Authorization: `Bearer ${token}`
+		}
+	})
+
+	return response
+}

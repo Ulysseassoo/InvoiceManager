@@ -10,7 +10,7 @@ export const OrderProvider = (props) => {
 	const getOrders = async (token) => {
 		try {
 			let response = await getAllOrders(token)
-			setOrders(response["hydra:member"])
+			setOrders(response)
 			setIsLoading(true)
 		} catch (error) {
 			console.log(error)
