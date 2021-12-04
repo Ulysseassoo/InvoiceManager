@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Controller\ChangeOrderStates;
 use App\Repository\OrderRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -13,7 +14,17 @@ use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * @ApiResource(
  *     normalizationContext={"groups"={"order:read"}},
- *     denormalizationContext={"groups"={"order:write"}}
+ *     denormalizationContext={"groups"={"order:write"}},
+ *     itemOperations= {
+ *      "get",
+ *      "put",
+ *      "delete",
+ *      "post_confirmation" = {
+ *          "method" = "GET",
+ *          "path" = "/orders/{id}/confirmation",
+ *          "controller" = ChangeOrderStates::class,
+ *       }
+ * }
  * )
  * @ORM\Entity(repositoryClass=OrderRepository::class)
  * @ORM\Table(name="`order`")

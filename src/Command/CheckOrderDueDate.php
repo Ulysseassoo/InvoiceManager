@@ -48,7 +48,7 @@ class CheckOrderDueDate extends Command
             '....',
             '.....',
         ]);
-        $orders = $this->orderManager->CheckOrdersDueDate();
+        $orders = $this->orderManager->checkOrdersDueDate();
         $length = count($orders);
         $output->writeln("There are {$length} orders that were not paid and over the due date.");
         if ($length > 0) {

@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Entity\Order;
 use App\Entity\User;
 use App\Repository\OrderRepository;
 use App\Repository\StateRepository;
@@ -23,7 +24,7 @@ class OrderManager
         $this->mailer = $mailer;
     }
     
-    public function CheckAmountOrders(): Array
+    public function checkAmountOrders(): Array
     {
         $orders = $this->orderRepository->checkOrderAmounts();
         // Id = 4, paid state
@@ -48,7 +49,7 @@ class OrderManager
         
         return $orders;
     }
-    public function CheckOrdersDueDate()
+    public function checkOrdersDueDate()
     {
         $orders = $this->orderRepository->checkDueDate();
         $lateState = $this->stateRepository->find(3);
@@ -58,6 +59,37 @@ class OrderManager
             $this->em->flush();
         }
         return $orders;
+    }
+
+    public function sendConfirmationMail(Order $order)
+    {
+        $treatedState = $this->stateRepository->find(2);
+        $order->setState($treatedState);
+        $this->em->persist($order);
+        $this->em->flush();
+
+        $email = (new TemplatedEmail())
+        ->from('no-reply@invoice-manger.com')
+        ->to('you@example.com')
+        ->subject('Confirmation Command')
+        ->htmlTemplate("invoice.html.twig")
+        ->context([
+            'data' => $order
+        ]);
+        $this->mailer->send($email);
+    }
+
+    public function sendReminderMail(Order $order)
+    {
+        $email = (new TemplatedEmail())
+        ->from('no-reply@invoice-manger.com')
+        ->to('you@example.com')
+        ->subject('Unpaid Reminder: You need to pay your command')
+        ->htmlTemplate("invoice.html.twig")
+        ->context([
+            'data' => $order
+        ]);
+        $this->mailer->send($email);
     }
 
 }

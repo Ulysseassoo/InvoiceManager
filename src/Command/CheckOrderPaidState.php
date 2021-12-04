@@ -48,7 +48,7 @@ class CheckOrderPaidState extends Command
             '....',
             '.....',
         ]);
-        $orders = $this->orderManager->CheckAmountOrders();
+        $orders = $this->orderManager->checkAmountOrders();
         $length = count($orders);
         $output->writeln("There are {$length} orders that were paid.");
         if ($length > 0) {
