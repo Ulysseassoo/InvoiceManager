@@ -44,6 +44,16 @@ class Invoice
      */
     private $client_address;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $client_phone_number;
+
+    /**
+     * @ORM\Column(type="datetime_immutable")
+     */
+    private $due_date;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -105,6 +115,30 @@ class Invoice
     public function setClientAddress(string $client_address): self
     {
         $this->client_address = $client_address;
+
+        return $this;
+    }
+
+    public function getClientPhoneNumber(): ?string
+    {
+        return $this->client_phone_number;
+    }
+
+    public function setClientPhoneNumber(string $client_phone_number): self
+    {
+        $this->client_phone_number = $client_phone_number;
+
+        return $this;
+    }
+
+    public function getDueDate(): ?\DateTimeImmutable
+    {
+        return $this->due_date;
+    }
+
+    public function setDueDate(\DateTimeImmutable $due_date): self
+    {
+        $this->due_date = $due_date;
 
         return $this;
     }

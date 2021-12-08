@@ -60,6 +60,16 @@ export const getOrder = async (order_id, token) => {
 	return json
 }
 
+export const sendConfirmation = async (order_id, token) => {
+	let response = await axios.get(`${baseUrl}/orders/${order_id}/confirmation`, {
+		headers: {
+			Authorization: `Bearer ${token}`
+		}
+	})
+
+	return response
+}
+
 export const getOrderStates = async (token) => {
 	let response = await axios.get(`${baseUrl}/states`, {
 		headers: {

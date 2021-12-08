@@ -1,25 +1,38 @@
 import React, { createContext, useEffect, useState } from "react"
+import { useNavigate } from "react-router"
 import { getAllOrders } from "../Services/APIs"
 
-export const OrderContext = createContext()
+export const OrderContext = createContext({
+	orders: []
+})
 
 export const OrderProvider = (props) => {
 	const [orders, setOrders] = useState([])
-	const [isLoading, setIsLoading] = useState(false)
+	const [isLoading, setIsLoading] = useState(true)
+
+	let navigate = useNavigate()
 
 	const getOrders = async (token) => {
 		try {
 			let response = await getAllOrders(token)
-			setOrders(response)
-			setIsLoading(true)
+			isLoading === false && setOrders(null)
+			isLoading && setOrders(response)
 		} catch (error) {
+			setIsLoading(true)
 			console.log(error)
 		}
 	}
-	useEffect(() => {
-		const token = localStorage.getItem("token")
-		getOrders(token)
-	}, [])
 
-	return <OrderContext.Provider value={{ orders, isLoading }}>{props.children}</OrderContext.Provider>
+	useEffect(() => {
+		setIsLoading(true)
+		const token = localStorage.getItem("token")
+		if (!token) {
+			return
+		}
+		setIsLoading(false)
+		getOrders(token)
+		return () => setIsLoading(true)
+	}, [navigate])
+
+	return <OrderContext.Provider value={{ orders, isLoading, setOrders, setIsLoading }}>{props.children}</OrderContext.Provider>
 }
