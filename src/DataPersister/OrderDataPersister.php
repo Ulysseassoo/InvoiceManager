@@ -6,18 +6,24 @@ use ApiPlatform\Core\DataPersister\ContextAwareDataPersisterInterface;
 use App\Entity\Invoice;
 use App\Entity\InvoiceRow;
 use App\Entity\Order;
+use DateTime;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Snappy\Pdf;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
+use Twig\Environment;
 
 final class OrderDataPersister implements ContextAwareDataPersisterInterface
 {
     private $entityManager;
     
-    public function __construct(EntityManagerInterface $entityManager, MailerInterface $mailer)
+    public function __construct(EntityManagerInterface $entityManager, MailerInterface $mailer,Pdf $knpSnappyPdf, Environment $templating)
     {
         $this->entityManager = $entityManager;
         $this->mailer = $mailer;
+        $this->knpSnappyPdf = $knpSnappyPdf;
+        $this->templating = $templating;
     }
     
     public function supports($data, array $context = []): bool
@@ -32,8 +38,10 @@ final class OrderDataPersister implements ContextAwareDataPersisterInterface
         $this->entityManager->flush();
         // Since it's here that we send the data to the database, we will send the invoice from here
         $invoice = new Invoice();
-        $uniqueId = random_bytes(10);
-        $invoice->setUniqueId(bin2hex($uniqueId));
+        $date = new DateTime();
+        $uniqueId = $date->getTimestamp();
+        $invoice->setUniqueId(intval($uniqueId));
+        $invoice->setCreatedAt(new DateTimeImmutable());
         $invoice->setClientFirstname($data->getFirstname());
         $invoice->setClientLastname($data->getLastname());
         $invoice->setClientAddress($data->getAddress());
@@ -55,13 +63,24 @@ final class OrderDataPersister implements ContextAwareDataPersisterInterface
             $this->entityManager->flush();
         }
 
+        // We create the invoice pdf
+        // $this->knpSnappyPdf->generate("http://localhost:8000/invoice/{$id}", __DIR__."..\\..\\InvoicePdf\\{$invoice->getUniqueId()}.pdf");
+        $this->knpSnappyPdf->generateFromHtml(
+            $this->templating->render(
+                'invoice/index.html.twig',
+                array(
+                    'order'  => $data
+                )
+            ),
+            __DIR__."..\\..\\InvoicePdf\\{$invoice->getUniqueId()}.pdf"
+        );
         // Email to send after order creation
         $email = (new TemplatedEmail())
         ->from('no-reply@invoice-manger.com')
         ->to('you@example.com')
         ->subject('Time for Symfony Mailer!')
         ->htmlTemplate("invoice.html.twig")
-        // ->attachFromPath('/path/to/documents/terms-of-use.pdf')
+        ->attachFromPath(__DIR__."..\\..\\InvoicePdf\\{$invoice->getUniqueId()}.pdf")
         ->context([
             'data' => $data
         ]);

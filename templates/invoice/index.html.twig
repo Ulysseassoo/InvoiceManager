@@ -1,0 +1,12 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+
+	<h1>{{order.firstname}}
+		{{order.lastname}}
+		nouvel order</h1>
+	<p>Adresse:
+		{{order.address}}</p>
+	<p>Due Date:
+		{{order.lastDate.format("Y/d/m")}}</p>
+{% endblock %}

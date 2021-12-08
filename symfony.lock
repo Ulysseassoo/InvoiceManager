@@ -451,6 +451,9 @@
     "webmozart/assert": {
         "version": "1.10.0"
     },
+    "wemersonjanuario/wkhtmltopdf-windows": {
+        "version": "0.12.2.3"
+    },
     "willdurand/negotiation": {
         "version": "3.0.0"
     }
