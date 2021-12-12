@@ -1,9 +1,13 @@
-import React, { createContext, useEffect } from "react"
+import React, { createContext, useEffect, useState } from "react"
 import { useNavigate } from "react-router"
+import { getCompanyInformations } from "../Services/APIs"
 
 export const UserContext = createContext()
 
 export const UserProvider = (props) => {
+	const [company, setCompany] = useState([])
+	const [isLoading, setIsLoading] = useState(true)
+
 	let navigate = useNavigate()
 	const parseJwt = (token) => {
 		try {
@@ -15,6 +19,16 @@ export const UserProvider = (props) => {
 	const logout = () => {
 		localStorage.removeItem("token")
 		navigate("/login")
+	}
+	const getCompanyData = async (token) => {
+		try {
+			let response = await getCompanyInformations(token)
+			isLoading === false && setCompany(null)
+			isLoading && setCompany(response)
+		} catch (error) {
+			setIsLoading(true)
+			console.log(error)
+		}
 	}
 
 	useEffect(() => {
@@ -29,7 +43,8 @@ export const UserProvider = (props) => {
 			logout()
 			return
 		}
+		getCompanyData(token)
 	}, [navigate])
 
-	return <UserContext.Provider value="">{props.children}</UserContext.Provider>
+	return <UserContext.Provider value={{ company, isLoading, setCompany }}>{props.children}</UserContext.Provider>
 }

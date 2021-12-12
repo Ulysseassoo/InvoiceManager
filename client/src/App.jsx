@@ -2,9 +2,7 @@ import { Route, Routes } from "react-router"
 import { BrowserRouter } from "react-router-dom"
 import Login from "./Screens/Login"
 import Company from "./Screens/Company"
-import OrderForm from "./Screens/OrderForm"
 import ListOrders from "./Screens/ListOrders"
-import Order from "./Screens/Order"
 import { createBreakpoints } from "@chakra-ui/theme-tools"
 import { UserProvider } from "./Provider/UserProvider"
 import { OrderProvider } from "./Provider/OrderProvider"
@@ -25,9 +23,7 @@ function App() {
 					<Routes>
 						<Route path="/login" element={<Login />} />
 						<Route path="/company" element={<Company />} />
-						<Route path="/orders/new" element={<OrderForm />} />
-						<Route path="/orders" element={<ListOrders />} />
-						<Route path="/orders/:id" element={<Order />} />
+						<Route path="/orders/*" element={<ListOrders />} />
 					</Routes>
 				</OrderProvider>
 			</UserProvider>
