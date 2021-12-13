@@ -1,12 +1,42 @@
-import React, { createContext, useEffect, useState } from "react"
+import React, { createContext, useEffect, useReducer, useState } from "react"
 import { useNavigate } from "react-router"
-import { getCompanyInformations } from "../Services/APIs"
+import { currentUser, getCompanyInformations } from "../Services/APIs"
 
 export const UserContext = createContext()
 
 export const UserProvider = (props) => {
 	const [company, setCompany] = useState([])
 	const [isLoading, setIsLoading] = useState(true)
+	const userReducer = (state, action) => {
+		switch (action.type) {
+			case "call-api": {
+				return {
+					...state,
+					userLoading: true
+				}
+			}
+			case "success": {
+				return {
+					...state,
+					userLoading: false,
+					user: action.data
+				}
+			}
+			case "error": {
+				return {
+					...state,
+					userLoading: false,
+					error: action.error
+				}
+			}
+		}
+	}
+
+	const initialState = {
+		user: {},
+		userLoading: false,
+		error: null
+	}
 
 	let navigate = useNavigate()
 	const parseJwt = (token) => {
@@ -31,6 +61,18 @@ export const UserProvider = (props) => {
 		}
 	}
 
+	const [state, dispatch] = useReducer(userReducer, initialState)
+
+	const getUser = async (token) => {
+		dispatch({ type: "call-api" })
+		try {
+			let response = await currentUser(token)
+			dispatch({ type: "success", data: response })
+		} catch (error) {
+			dispatch({ type: "error", error: error })
+		}
+	}
+
 	useEffect(() => {
 		const token = localStorage.getItem("token")
 		if (!token) {
@@ -43,7 +85,9 @@ export const UserProvider = (props) => {
 			logout()
 			return
 		}
+		getUser(token)
 		getCompanyData(token)
+		console.log(state)
 	}, [navigate])
 
 	return <UserContext.Provider value={{ company, isLoading, setCompany }}>{props.children}</UserContext.Provider>

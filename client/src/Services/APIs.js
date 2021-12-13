@@ -12,6 +12,20 @@ export const login = async (data) => {
 	}
 }
 
+export const currentUser = async (token) => {
+	try {
+		const reponse = await axios.get(`${baseUrl}/user/me`, {
+			headers: {
+				"Content-type": "application/json",
+				Authorization: `Bearer ${token}`
+			}
+		})
+	} catch (error) {
+		console.log(error)
+	}
+
+	return response.data
+}
 export const getAllOrders = async (token) => {
 	try {
 		const response = await axios.get(`${baseUrl}/orders`, {

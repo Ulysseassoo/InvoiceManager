@@ -8,9 +8,6 @@ export const OrderContext = createContext({
 })
 
 export const OrderProvider = (props) => {
-	// const [orders, setOrders] = useState([])
-	// const [isLoading, setIsLoading] = useState(false)
-
 	const ordersReducer = (state, action) => {
 		switch (action.type) {
 			case "call-api": {
@@ -50,7 +47,7 @@ export const OrderProvider = (props) => {
 		}
 	}
 	const initialState = {
-		orders: "",
+		orders: [],
 		loading: false,
 		error: null
 	}
