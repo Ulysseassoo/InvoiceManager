@@ -61,6 +61,7 @@ final class OrderDataPersister implements ContextAwareDataPersisterInterface
 
 		// Then create the Invoice Rows
 		$products = $data->getProducts();
+		$totalOrderAmount = 0;
 		foreach ($products as $product) {
 			$row = new InvoiceRow();
 			$row->setName($product->getName());
@@ -68,6 +69,7 @@ final class OrderDataPersister implements ContextAwareDataPersisterInterface
 			$row->setCommandId($product->getCommand()->getId());
 			$this->entityManager->persist($row);
 			$this->entityManager->flush();
+			$totalOrderAmount += $product->getAmount();
 		}
 
 		// Selecting our Company
@@ -78,6 +80,9 @@ final class OrderDataPersister implements ContextAwareDataPersisterInterface
 			$this->templating->render("invoice/invoicepdf.html.twig", [
 				"invoice" => $invoice,
 				"company" => $company,
+				"products" => $products,
+				"order" => $data,
+				"totalAmount" => $totalOrderAmount,
 			]),
 			__DIR__ . "..\\..\\InvoicePdf\\{$invoice->getUniqueId()}.pdf"
 		);
