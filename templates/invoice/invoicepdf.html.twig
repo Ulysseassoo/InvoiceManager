@@ -1,0 +1,53 @@
+{% extends "base.html.twig" %} {% block title %}Invoice {% endblock %} {% block stylesheets %}
+<link rel="stylesheet" type="text/css" href="{{ app.request.scheme ~'://' ~ app.request.httpHost ~ asset('css/reset.css') }}" />
+<link rel="stylesheet" type="text/css" href="{{ app.request.scheme ~'://' ~ app.request.httpHost ~ asset('css/style.css') }}" />
+{% endblock %} {% block body %}
+
+<div class="container">
+	<div class="model-box">
+	<div class="flex-between align-center">
+		<div class="flex-column justify-center">
+			<img src="{{  absolute_url(asset('uploads/' ~ company.logo)) }}" />
+		</div>
+		<div class="right flex-column">
+			<p>Invoice #: {{ invoice.id }}</p>
+			<p>Created: {{ invoice.createdAt.format("m/d/Y") }}</p>
+			<p>Due: {{ invoice.dueDate.format("m/d/Y") }}</p>
+		</div>
+	</div>
+	<div class="flex-between align-center">
+		<div class="flex-column">
+			<p>{{ company.name }}</p>
+			<p>{{ company.address }}</p>
+		</div>
+		<div class="right flex-column">
+			<p>{{ invoice.clientFirstname }} {{ invoice.clientLastname }}</p>
+			<p>{{ invoice.clientAddress }}</p>
+		</div>
+	</div>
+	<div class="table">
+		<div class="bg-gray flex-between">
+			<p>Payment Method</p>
+			<p>Check #</p>
+		</div>
+		<div class="bg-white flex-between">
+			<p>Check</p>
+			<p>1000</p>
+		</div>	
+	</div>
+	<div class="table">
+		<div class="bg-gray flex-between">
+			<p>Item</p>
+			<p>Price</p>
+		</div>
+		<div class="bg-white p-bottom-gray flex-between">
+			<p>Website Design</p>
+			<p>$300.00</p>
+		</div>
+		<p class="text-bold">Total: $300.00</p>
+	</div>
+	</div>
+	
+	</div>
+</div>
+{% endblock %}

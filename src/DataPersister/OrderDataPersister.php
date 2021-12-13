@@ -6,6 +6,7 @@ use ApiPlatform\Core\DataPersister\ContextAwareDataPersisterInterface;
 use App\Entity\Invoice;
 use App\Entity\InvoiceRow;
 use App\Entity\Order;
+use App\Repository\CompanyRepository;
 use DateTime;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
@@ -18,12 +19,18 @@ final class OrderDataPersister implements ContextAwareDataPersisterInterface
 {
 	private $entityManager;
 
-	public function __construct(EntityManagerInterface $entityManager, MailerInterface $mailer, Pdf $knpSnappyPdf, Environment $templating)
-	{
+	public function __construct(
+		EntityManagerInterface $entityManager,
+		MailerInterface $mailer,
+		Pdf $knpSnappyPdf,
+		Environment $templating,
+		CompanyRepository $companyRepository
+	) {
 		$this->entityManager = $entityManager;
 		$this->mailer = $mailer;
 		$this->knpSnappyPdf = $knpSnappyPdf;
 		$this->templating = $templating;
+		$this->companyRepository = $companyRepository;
 	}
 
 	public function supports($data, array $context = []): bool
@@ -63,19 +70,24 @@ final class OrderDataPersister implements ContextAwareDataPersisterInterface
 			$this->entityManager->flush();
 		}
 
+		// Selecting our Company
+		$company = $this->companyRepository->find(1);
+
 		// We create the invoice pdf
 		$this->knpSnappyPdf->generateFromHtml(
-			$this->templating->render("invoice/index.html.twig", [
-				"order" => $data,
+			$this->templating->render("invoice/invoicepdf.html.twig", [
+				"invoice" => $invoice,
+				"company" => $company,
 			]),
 			__DIR__ . "..\\..\\InvoicePdf\\{$invoice->getUniqueId()}.pdf"
 		);
+
 		// Email to send after order creation
 		$email = (new TemplatedEmail())
-			->from("no-reply@invoice-manger.com")
+			->from("no-reply@Ubereats-society.com")
 			->to("you@example.com")
-			->subject("Time for Symfony Mailer!")
-			->htmlTemplate("invoice.html.twig")
+			->subject("Invoice for a new order !")
+			->htmlTemplate("invoiceCreated.html.twig")
 			->attachFromPath(__DIR__ . "..\\..\\InvoicePdf\\{$invoice->getUniqueId()}.pdf")
 			->context([
 				"data" => $data,
