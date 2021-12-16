@@ -1,13 +1,18 @@
-import { Box } from "@chakra-ui/react"
+import { Box, Heading, Stack } from "@chakra-ui/react"
 import React from "react"
 import CompanyForm from "../Components/CompanyForm"
+import SidebarWithHeader from "../Components/Sidebar"
 
 const Company = () => {
 	return (
-		<Box padding={2}>
-			<h1>Company Form</h1>
-			<CompanyForm />
-		</Box>
+		<SidebarWithHeader>
+			<Box padding={2}>
+				<Heading>Company Form</Heading>
+				<Stack marginY={5}>
+					<CompanyForm />
+				</Stack>
+			</Box>
+		</SidebarWithHeader>
 	)
 }
 

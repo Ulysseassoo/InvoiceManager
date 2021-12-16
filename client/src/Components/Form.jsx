@@ -14,6 +14,7 @@ const Form = ({ order = null, onClose }) => {
 	const context = useContext(OrderContext)
 	const { dispatch } = context
 	const token = localStorage.getItem("token")
+	const today = new Date()
 	const {
 		register,
 		handleSubmit,
@@ -35,6 +36,10 @@ const Form = ({ order = null, onClose }) => {
 		}
 	}, [])
 	const onSubmit = async (formData) => {
+		if (formData.lastDate < today) {
+			errors.lastDate = "The Date chosen can't be inferior to today's date !"
+			return
+		}
 		if (order) {
 			formData.payment.forEach((element, index) => {
 				element.id = `/api/payments/${order.payment[index].id}`
@@ -44,7 +49,6 @@ const Form = ({ order = null, onClose }) => {
 			})
 		}
 		const newData = { ...formData, state: "/api/states/1" }
-		console.log(newData)
 		try {
 			if (order) {
 				let { data, request } = await updateOrder(newData, token, order.id)
@@ -101,7 +105,7 @@ const Form = ({ order = null, onClose }) => {
 					</Box>
 					<Box>
 						<FormLabel htmlFor="date">Due Date</FormLabel>
-						<Input type="date" id="date" {...register("lastDate", { required: true, valueAsDate: true })} />
+						<Input type="date" id="date" {...register("lastDate", { required: true, valueAsDate: true, validate: (value) => value > today })} />
 						<FormErrorMessage>{errors.lastDate && errors.lastDate.message}</FormErrorMessage>
 					</Box>
 				</Stack>

@@ -33,8 +33,10 @@ const Card = ({ order }) => {
 				alignItems={"center"}
 				justifyContent={"space-between"}
 				cursor={"pointer"}
-				onClick={onOpenItem}>
-				key={order.id}
+				outline={"1px solid transparent"}
+				onClick={onOpenItem}
+				transition={"0.2s ease-in"}
+				_hover={{ outline: "1px solid #0075d4" }}>
 				<Flex alignItems="center" gridGap={4}>
 					<Badge variant="solid" colorScheme="green" rounded="full" px={2}>
 						#{order.id}

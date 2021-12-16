@@ -1,14 +1,19 @@
 import { Box, Button, FormErrorMessage, FormLabel, Input } from "@chakra-ui/react"
-import React from "react"
+import React, { useContext, useEffect } from "react"
 import { useForm } from "react-hook-form"
+import { toast } from "react-toastify"
+import { UserContext } from "../Provider/UserProvider"
 import { updateCompanyInformations } from "../Services/APIs"
 
 const CompanyForm = () => {
 	const token = localStorage.getItem("token")
+	const context = useContext(UserContext)
+	const { company, isLoading, setCompany } = context
 	const {
 		register,
 		handleSubmit,
 		isSubmitting,
+		setValue,
 		formState: { errors }
 	} = useForm()
 	const onSubmit = async (companyData) => {
@@ -17,14 +22,23 @@ const CompanyForm = () => {
 		formData.append("address", companyData.address)
 		formData.append("logo", companyData.logo[0])
 		try {
-			let { data } = await updateCompanyInformations(formData, token)
-			console.log(data)
+			let { data, request } = await updateCompanyInformations(formData, token)
+			if (request.status === 201) {
+				setCompany(data)
+				toast.success("The company has been updated !")
+			} else {
+				toast.error(request.statusText)
+			}
 		} catch (error) {
 			console.log(error)
 		}
 	}
+	useEffect(() => {
+		const { name, address } = company
+		setValue("name", name)
+		setValue("address", address)
+	}, [company])
 	// console.log(errors)
-
 	return (
 		<form onSubmit={handleSubmit(onSubmit)}>
 			<Box>
