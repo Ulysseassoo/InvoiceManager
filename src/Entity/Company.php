@@ -8,8 +8,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Controller\CompanyController;
 
-
-
 /**
  * @ApiResource(
  *  collectionOperations={
@@ -50,7 +48,7 @@ use App\Controller\CompanyController;
  *     },
  *  },
  * itemOperations={"get", "put" = {
- *       "method" = "POST",
+ *       "method" = "post",
  *       "controller" = CompanyController::class,
  *       "deserialize" = false,
  *       "openapi_context" = {
@@ -89,70 +87,70 @@ use App\Controller\CompanyController;
  */
 class Company
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     * @Groups("company")
-     */
-    private $id;
+	/**
+	 * @ORM\Id
+	 * @ORM\GeneratedValue
+	 * @ORM\Column(type="integer")
+	 * @Groups("company")
+	 */
+	private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @Groups("company")
-     */
-    private $name;
+	/**
+	 * @ORM\Column(type="string", length=255)
+	 * @Groups("company")
+	 */
+	private $name;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @Groups("company")
-     */
-    private $address;
+	/**
+	 * @ORM\Column(type="string", length=255)
+	 * @Groups("company")
+	 */
+	private $address;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @Groups("company")
-     */
-    private $logo;
+	/**
+	 * @ORM\Column(type="string", length=255)
+	 * @Groups("company")
+	 */
+	private $logo;
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
+	public function getId(): ?int
+	{
+		return $this->id;
+	}
 
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
+	public function getName(): ?string
+	{
+		return $this->name;
+	}
 
-    public function setName(string $name): self
-    {
-        $this->name = $name;
+	public function setName(string $name): self
+	{
+		$this->name = $name;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    public function getAddress(): ?string
-    {
-        return $this->address;
-    }
+	public function getAddress(): ?string
+	{
+		return $this->address;
+	}
 
-    public function setAddress(string $address): self
-    {
-        $this->address = $address;
+	public function setAddress(string $address): self
+	{
+		$this->address = $address;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    public function getLogo(): ?string
-    {
-        return $this->logo;
-    }
+	public function getLogo(): ?string
+	{
+		return $this->logo;
+	}
 
-    public function setLogo(string $logo): self
-    {
-        $this->logo = $logo;
+	public function setLogo(string $logo): self
+	{
+		$this->logo = $logo;
 
-        return $this;
-    }
+		return $this;
+	}
 }
