@@ -34,6 +34,7 @@ const Card = ({ order }) => {
 				justifyContent={"space-between"}
 				cursor={"pointer"}
 				onClick={onOpenItem}>
+				key={order.id}
 				<Flex alignItems="center" gridGap={4}>
 					<Badge variant="solid" colorScheme="green" rounded="full" px={2}>
 						#{order.id}
@@ -90,7 +91,7 @@ const Card = ({ order }) => {
 								Products :
 								{order.products.map((product) => {
 									return (
-										<List>
+										<List key={product.id}>
 											<ListItem paddingLeft={4}>Name: {product.name}</ListItem>
 											<ListItem paddingLeft={4}>Price: {product.amount}</ListItem>
 										</List>
@@ -101,7 +102,7 @@ const Card = ({ order }) => {
 								Payment :
 								{order.payment.map((payment) => {
 									return (
-										<List>
+										<List key={payment.id}>
 											<ListItem paddingLeft={4}>Name: {payment.type}</ListItem>
 											<ListItem paddingLeft={4}>Price: {payment.amount}</ListItem>
 										</List>

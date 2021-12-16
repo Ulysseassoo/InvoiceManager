@@ -14,17 +14,16 @@ export const login = async (data) => {
 
 export const currentUser = async (token) => {
 	try {
-		const reponse = await axios.get(`${baseUrl}/user/me`, {
+		const response = await axios.get(`${baseUrl}/user/me`, {
 			headers: {
 				"Content-type": "application/json",
 				Authorization: `Bearer ${token}`
 			}
 		})
+		return response.data
 	} catch (error) {
 		console.log(error)
 	}
-
-	return response.data
 }
 export const getAllOrders = async (token) => {
 	try {

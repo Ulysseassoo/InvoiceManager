@@ -90,5 +90,5 @@ export const UserProvider = (props) => {
 		console.log(state)
 	}, [navigate])
 
-	return <UserContext.Provider value={{ company, isLoading, setCompany }}>{props.children}</UserContext.Provider>
+	return <UserContext.Provider value={{ company, isLoading, setCompany, state }}>{props.children}</UserContext.Provider>
 }
