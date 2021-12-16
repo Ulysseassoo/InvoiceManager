@@ -51,6 +51,16 @@ export const createOrder = async (data, token) => {
 	return response
 }
 
+export const updateOrder = async (data, token, order_id) => {
+	let response = await axios.put(`${baseUrl}/orders/${order_id}`, data, {
+		headers: {
+			Authorization: `Bearer ${token}`
+		}
+	})
+
+	return response
+}
+
 export const getCompanyInformations = async (token) => {
 	let response = await axios.get(`${baseUrl}/companies/1`, {
 		headers: {

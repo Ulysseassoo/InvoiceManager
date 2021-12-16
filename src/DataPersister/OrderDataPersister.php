@@ -80,7 +80,6 @@ final class OrderDataPersister implements ContextAwareDataPersisterInterface
 			$this->templating->render("invoice/invoicepdf.html.twig", [
 				"invoice" => $invoice,
 				"company" => $company,
-				"products" => $products,
 				"order" => $data,
 				"totalAmount" => $totalOrderAmount,
 			]),

@@ -2,92 +2,62 @@ import { Button } from "@chakra-ui/button"
 import { FormErrorMessage, FormLabel } from "@chakra-ui/form-control"
 import { Input } from "@chakra-ui/input"
 import { Box, Flex, Heading, Stack } from "@chakra-ui/layout"
-import React, { useEffect, useState } from "react"
-import { useForm, useFieldArray } from "react-hook-form"
-import { createOrder, updateOrder } from "../Services/APIs"
+import React, { useState } from "react"
+import { useForm } from "react-hook-form"
+import { updateOrder } from "../Services/APIs"
 
-const Form = ({ order = null }) => {
-	const [numberPayment, setNumberPayment] = useState(1)
-	const [numberProducts, setNumberProducts] = useState(1)
+const EditForm = ({ order }) => {
+	const { firstname, lastname, id, payment, products, address, phoneNumber, lastDate } = order
+	const [numberPayment, setNumberPayment] = useState(payment.length)
+	const [numberProducts, setNumberProducts] = useState(products.length)
 	const token = localStorage.getItem("token")
 	const {
 		register,
 		handleSubmit,
-		setValue,
 		formState: { errors, isSubmitting }
 	} = useForm()
-	useEffect(() => {
-		if (order) {
-			const { firstname, lastname, payment, products, address, phoneNumber, lastDate } = order
-			setValue("firstname", firstname)
-			setValue("lastname", lastname)
-			setValue("payment", payment)
-			setValue("products", products)
-			setValue("address", address)
-			setValue("phoneNumber", phoneNumber)
-			setValue("lastDate", lastDate)
-			setNumberPayment(payment.length)
-			setNumberProducts(products.length)
-		}
-	}, [])
 	const onSubmit = async (formData) => {
-		if (order) {
-			formData.payment.forEach((element, index) => {
-				console.log(order.payment)
-				element.id = `/api/payments/${order.payment[index].id}`
-			})
-			formData.products.forEach((element, index) => {
-				element.id = `/api/products/${order.products[index].id}`
-			})
-		}
-		const newData = { ...formData, state: "/api/states/1" }
-		console.log(newData)
+		console.log(formData)
+		// const newData = { ...formData, state: "/api/states/1" }
 		try {
-			if (order) {
-				let { data } = await updateOrder(newData, token, order.id)
-				console.log(data)
-			} else {
-				let { data } = await createOrder(newData, token)
-				console.log(data)
-			}
+			// let { data } = await updateOrder(newData, token, id)
+			console.log(data)
 		} catch (error) {
 			console.log(error)
 		}
 	}
 	return (
 		<>
-			{!order && (
-				<Flex gridGap="2rem" paddingY="2rem">
-					<Button onClick={() => setNumberPayment((prev) => prev + 1)}>Add a payment</Button>
-					<Button onClick={() => setNumberProducts((prev) => prev + 1)}>Add a product</Button>
-				</Flex>
-			)}
+			<Flex gridGap="2rem" paddingY="2rem">
+				<Button onClick={() => setNumberPayment((prev) => prev + 1)}>Add a payment</Button>
+				<Button onClick={() => setNumberProducts((prev) => prev + 1)}>Add a product</Button>
+			</Flex>
 
 			<form onSubmit={handleSubmit(onSubmit)}>
 				<Stack spacing="24px">
 					<Box>
 						<FormLabel htmlFor="firstname">Firstname</FormLabel>
-						<Input type="text" id="firstname" placeholder="Please enter your firstname" {...register("firstname", { required: true })} />
+						<Input type="text" id="firstname" placeholder={firstname} {...register("firstname", { required: true })} />
 						<FormErrorMessage>{errors.firstname && errors.firstname.message}</FormErrorMessage>
 					</Box>
 					<Box>
 						<FormLabel htmlFor="lastname">Lastname</FormLabel>
-						<Input type="text" id="lastname" placeholder="Please enter your lastname" {...register("lastname", { required: true })} />
+						<Input type="text" id="lastname" placeholder={lastname} {...register("lastname", { required: true })} />
 						<FormErrorMessage>{errors.lastname && errors.lastname.message}</FormErrorMessage>
 					</Box>
 					<Box>
 						<FormLabel htmlFor="phone">Phone Number</FormLabel>
-						<Input type="text" id="phone" placeholder="Ex: (+33) 6 20 33 56" {...register("phoneNumber", { required: true })} />
+						<Input type="text" id="phone" placeholder={phoneNumber} {...register("phoneNumber", { required: true })} />
 						<FormErrorMessage>{errors.phoneNumber && errors.phoneNumber.message}</FormErrorMessage>
 					</Box>
 					<Box>
 						<FormLabel htmlFor="address">Address</FormLabel>
-						<Input type="text" id="address" placeholder="Ex: 123 Avenue de l'arche, 93000" {...register("address", { required: true })} />
+						<Input type="text" id="address" placeholder={address} {...register("address", { required: true })} />
 						<FormErrorMessage>{errors.address && errors.address.message}</FormErrorMessage>
 					</Box>
 					<Box>
 						<FormLabel htmlFor="date">Due Date</FormLabel>
-						<Input type="date" id="date" {...register("lastDate", { required: true, valueAsDate: true })} />
+						<Input type="date" id="date" value={lastDate} {...register("lastDate", { required: true, valueAsDate: true })} />
 						<FormErrorMessage>{errors.lastDate && errors.lastDate.message}</FormErrorMessage>
 					</Box>
 				</Stack>
@@ -96,12 +66,12 @@ const Form = ({ order = null }) => {
 						Payment
 					</Heading>
 					<Box>
-						{Array.from(Array(numberPayment).keys()).map((_, index) => {
+						{payment.map((pay, index) => {
 							return (
 								<Box key={index}>
 									<Box>
 										<FormLabel htmlFor="type">Type</FormLabel>
-										<Input type="text" id="type" placeholder="Which type of payment ?" {...register(`payment.${index}.type`, { required: true })} />
+										<Input type="text" id="type" placeholder={pay.type} {...register(`payment.${index}.type`, { required: true })} />
 										<FormErrorMessage>{errors[`payment.${index}.type`] && errors[`payment.${index}.type`].message}</FormErrorMessage>
 									</Box>
 									<Box>
@@ -109,7 +79,7 @@ const Form = ({ order = null }) => {
 										<Input
 											type="number"
 											id="amountPayment"
-											placeholder="Amount..."
+											placeholder={`${pay.amount} €`}
 											{...register(`payment.${index}.amount`, { required: true, valueAsNumber: true })}
 										/>
 										<FormErrorMessage>{errors[`payment.${index}.amount`] && errors[`payment.${index}.amount`].message}</FormErrorMessage>
@@ -123,12 +93,12 @@ const Form = ({ order = null }) => {
 					<Heading size="lg" paddingY="1rem">
 						Products
 					</Heading>
-					{Array.from(Array(numberProducts).keys()).map((_, index) => {
+					{products.map((pro, index) => {
 						return (
 							<Box key={index}>
 								<Box>
 									<FormLabel htmlFor="nameProduct">Name</FormLabel>
-									<Input type="text" id="nameProduct" placeholder="Name" {...register(`products.${index}.name`, { required: true })} />
+									<Input type="text" id="nameProduct" placeholder={pro.name} {...register(`products.${index}.name`, { required: true })} />
 									<FormErrorMessage>{errors[`products.${index}.name`] && errors[`products.${index}.name`].message}</FormErrorMessage>
 								</Box>
 								<Box>
@@ -136,7 +106,7 @@ const Form = ({ order = null }) => {
 									<Input
 										type="number"
 										id="amountProduct"
-										placeholder="€"
+										placeholder={`${pro.amount} €`}
 										{...register(`products.${index}.amount`, { required: true, valueAsNumber: true })}
 									/>
 									<FormErrorMessage>{errors[`products.${index}.amount`] && errors[`products.${index}.amount`].message}</FormErrorMessage>
@@ -146,11 +116,11 @@ const Form = ({ order = null }) => {
 					})}
 				</Box>
 				<Button mt={4} colorScheme="blue" isLoading={isSubmitting} type="submit">
-					{order ? "Update" : "Create"}
+					Update
 				</Button>
 			</form>
 		</>
 	)
 }
 
-export default Form
+export default EditForm

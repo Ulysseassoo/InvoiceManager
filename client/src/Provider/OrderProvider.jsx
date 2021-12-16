@@ -57,7 +57,6 @@ export const OrderProvider = (props) => {
 
 	const getOrders = async (token) => {
 		dispatch({ type: "call-api" })
-
 		try {
 			let response = await getAllOrders(token)
 			dispatch({ type: "success", data: response })

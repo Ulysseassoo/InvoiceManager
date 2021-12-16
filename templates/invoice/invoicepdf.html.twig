@@ -40,8 +40,8 @@
 				</div>
 				{% for payment in order.payment %}
 					<div class="bg-white flex-between">
-						<p>{{order.type}}</p>
-						<p>{{order.amount}}</p>
+						<p>{{payment.type}}</p>
+						<p>{{payment.amount}}</p>
 					</div>
 				{% endfor %}
 			</div>
@@ -50,7 +50,7 @@
 					<p>Item</p>
 					<p>Price</p>
 				</div>
-				{% for product in products %}
+				{% for product in order.products %}
 					<div class="bg-white p-bottom-gray flex-between">
 						<p>{{product.name}}</p>
 						<p>${{product.amount}}</p>

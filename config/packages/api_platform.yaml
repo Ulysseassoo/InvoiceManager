@@ -13,3 +13,7 @@ api_platform:
     multipart: ["multipart/form-data"]
   swagger:
     versions: [3]
+    api_keys:
+      apiKey:
+        name: Authorization
+        type: header
