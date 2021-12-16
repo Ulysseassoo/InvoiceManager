@@ -37,6 +37,14 @@ export const OrderProvider = (props) => {
 					orders: newOrders
 				}
 			}
+			case "add": {
+				const newOrders = [...state.orders, action.data]
+				return {
+					...state,
+					loading: false,
+					orders: newOrders
+				}
+			}
 			case "error": {
 				return {
 					...state,

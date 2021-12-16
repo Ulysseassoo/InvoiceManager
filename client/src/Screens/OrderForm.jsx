@@ -14,7 +14,7 @@ const OrderForm = ({ onClose, isOpen }) => {
 					<DrawerCloseButton />
 					<DrawerHeader borderBottomWidth="1px">Create a new order</DrawerHeader>
 					<DrawerBody>
-						<Form />
+						<Form onClose={onClose} />
 					</DrawerBody>
 				</DrawerContent>
 			</Drawer>

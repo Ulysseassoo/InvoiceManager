@@ -6,6 +6,8 @@ import ListOrders from "./Screens/ListOrders"
 import { createBreakpoints } from "@chakra-ui/theme-tools"
 import { UserProvider } from "./Provider/UserProvider"
 import { OrderProvider } from "./Provider/OrderProvider"
+import { ToastContainer } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
 
 const breakpoints = createBreakpoints({
 	sm: "30em",
@@ -18,6 +20,7 @@ const breakpoints = createBreakpoints({
 function App() {
 	return (
 		<BrowserRouter>
+			<ToastContainer />
 			<UserProvider>
 				<OrderProvider>
 					<Routes>

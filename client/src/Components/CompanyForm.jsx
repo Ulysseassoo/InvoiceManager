@@ -1,3 +1,4 @@
+import { Box, Button, FormErrorMessage, FormLabel, Input } from "@chakra-ui/react"
 import React from "react"
 import { useForm } from "react-hook-form"
 import { updateCompanyInformations } from "../Services/APIs"
@@ -7,6 +8,7 @@ const CompanyForm = () => {
 	const {
 		register,
 		handleSubmit,
+		isSubmitting,
 		formState: { errors }
 	} = useForm()
 	const onSubmit = async (companyData) => {
@@ -25,11 +27,24 @@ const CompanyForm = () => {
 
 	return (
 		<form onSubmit={handleSubmit(onSubmit)}>
-			<input type="text" placeholder="name" {...register("name", {})} />
-			<input type="text" placeholder="address" {...register("address", {})} />
-			<input type="file" placeholder="logo" {...register("logo", {})} />
-
-			<input type="submit" />
+			<Box>
+				<FormLabel htmlFor="name">Company Name</FormLabel>
+				<Input type="text" id="name" placeholder="Company Name" {...register("name", {})} />
+				<FormErrorMessage>{errors.name && errors.name.message}</FormErrorMessage>
+			</Box>
+			<Box>
+				<FormLabel htmlFor="address">Address</FormLabel>
+				<Input type="text" id="address" placeholder="address" {...register("address", {})} />
+				<FormErrorMessage>{errors.address && errors.address.message}</FormErrorMessage>
+			</Box>
+			<Box>
+				<FormLabel htmlFor="logo">Address</FormLabel>
+				<Input type="file" id="logo" placeholder="logo" {...register("logo", {})} />
+				<FormErrorMessage>{errors.logo && errors.logo.message}</FormErrorMessage>
+			</Box>
+			<Button mt={4} colorScheme="blue" isLoading={isSubmitting} type="submit">
+				Update
+			</Button>
 		</form>
 	)
 }

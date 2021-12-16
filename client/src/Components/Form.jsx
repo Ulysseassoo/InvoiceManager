@@ -2,13 +2,17 @@ import { Button } from "@chakra-ui/button"
 import { FormErrorMessage, FormLabel } from "@chakra-ui/form-control"
 import { Input } from "@chakra-ui/input"
 import { Box, Flex, Heading, Stack } from "@chakra-ui/layout"
-import React, { useEffect, useState } from "react"
+import { toast } from "react-toastify"
+import React, { useContext, useEffect, useState } from "react"
 import { useForm, useFieldArray } from "react-hook-form"
 import { createOrder, updateOrder } from "../Services/APIs"
+import { OrderContext } from "../Provider/OrderProvider"
 
-const Form = ({ order = null }) => {
+const Form = ({ order = null, onClose }) => {
 	const [numberPayment, setNumberPayment] = useState(1)
 	const [numberProducts, setNumberProducts] = useState(1)
+	const context = useContext(OrderContext)
+	const { dispatch } = context
 	const token = localStorage.getItem("token")
 	const {
 		register,
@@ -33,7 +37,6 @@ const Form = ({ order = null }) => {
 	const onSubmit = async (formData) => {
 		if (order) {
 			formData.payment.forEach((element, index) => {
-				console.log(order.payment)
 				element.id = `/api/payments/${order.payment[index].id}`
 			})
 			formData.products.forEach((element, index) => {
@@ -44,11 +47,22 @@ const Form = ({ order = null }) => {
 		console.log(newData)
 		try {
 			if (order) {
-				let { data } = await updateOrder(newData, token, order.id)
-				console.log(data)
+				let { data, request } = await updateOrder(newData, token, order.id)
+				if (request.status === "200") {
+					toast.success("The order was updated !")
+				} else {
+					toast.error(`Error: ${request.status.text}`)
+				}
 			} else {
-				let { data } = await createOrder(newData, token)
-				console.log(data)
+				let { data, request } = await createOrder(newData, token)
+				if (request.status === "201") {
+					dispatch({ type: "add", data: data })
+					console.log(request)
+					onClose()
+					toast.success("The order was created !")
+				} else {
+					toast.error(`Error: ${request.status.text}`)
+				}
 			}
 		} catch (error) {
 			console.log(error)
