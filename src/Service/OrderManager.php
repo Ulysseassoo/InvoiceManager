@@ -35,11 +35,10 @@ class OrderManager
 			$this->em->flush();
 
 			$email = (new TemplatedEmail())
-				->from("no-reply@invoice-manger.com")
+				->from("Ubereats@manager.com")
 				->to("you@example.com")
-				->subject("Time for Symfony Mailer!")
-				->htmlTemplate("invoice.html.twig")
-				// ->attachFromPath('/path/to/documents/terms-of-use.pdf')
+				->subject("Confirmation Order !")
+				->htmlTemplate("send_confirmation_mail/index.html.twig")
 				->context([
 					"data" => $order,
 				]);

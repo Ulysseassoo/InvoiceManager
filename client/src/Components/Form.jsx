@@ -48,7 +48,11 @@ const Form = ({ order = null, onClose }) => {
 				element.id = `/api/products/${order.products[index].id}`
 			})
 		}
-		const newData = { ...formData, state: "/api/states/1" }
+		if (order) {
+			const newData = { ...formData }
+		} else {
+			const newData = { ...formData, state: "/api/states/1" }
+		}
 		try {
 			if (order) {
 				let { data, request } = await updateOrder(newData, token, order.id)

@@ -57,7 +57,7 @@ const Card = ({ order }) => {
 					<Spacer />
 					{order.state.id === 1 && (
 						<Button variant="solid" colorScheme="blue" size="sm" onClick={() => sendMail(order.id)}>
-							Send confirmation
+							Send Invoice
 						</Button>
 					)}
 					{order.state.id === 3 && (

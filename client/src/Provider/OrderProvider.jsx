@@ -79,7 +79,6 @@ export const OrderProvider = (props) => {
 			return
 		}
 		getOrders(token)
-		return () => setIsLoading(true)
 	}, [navigate])
 
 	return <OrderContext.Provider value={{ state, dispatch }}>{props.children}</OrderContext.Provider>
